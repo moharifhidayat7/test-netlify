@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web2PDF - Premium Printing Service</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(79, 70, 229, 0.15) 0%, transparent 40%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            z-index: 10;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            background: var(--primary-hover);
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loader {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .status {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            min-height: 1.2rem;
+        }
+
+        .error {
+            color: #f87171;
+        }
+
+        .success {
+            color: #4ade80;
+        }
+
+        /* Subtle Background Elements */
+        .blob {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            filter: blur(80px);
+            opacity: 0.2;
+            z-index: 1;
+            border-radius: 50%;
+            animation: float 20s infinite alternate;
+        }
+
+        .blob-1 {
+            top: -100px;
+            left: -100px;
+        }
+
+        .blob-2 {
+            bottom: -100px;
+            right: -100px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(100px, 100px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="container">
+        <div class="card">
+            <h1>Web2PDF</h1>
+            <p>Convert any web page to a premium PDF</p>
+
+            <form id="printForm">
+                <div class="input-group">
+                    <input type="url" id="urlInput" placeholder="https://example.com" required>
+                </div>
+                <button type="submit" id="submitBtn">
+                    <span id="btnText">Generate PDF</span>
+                    <div class="loader" id="loader"></div>
+                </button>
+            </form>
+
+            <div id="status" class="status"></div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('printForm');
+        const input = document.getElementById('urlInput');
+        const btn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const loader = document.getElementById('loader');
+        const status = document.getElementById('status');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const url = input.value;
+            if (!url) return;
+
+            // UI State
+            btn.disabled = true;
+            btnText.style.display = 'none';
+            loader.style.display = 'block';
+            status.textContent = 'Launching browser and generating PDF...';
+            status.className = 'status';
+
+            try {
+                const response = await fetch(`/.netlify/functions/print?url=${encodeURIComponent(url)}`);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to generate PDF');
+                }
+
+                // Download the file
+                const blob = await response.blob();
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = `print-${new Date().getTime()}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(downloadUrl);
+
+                status.textContent = 'PDF generated successfully!';
+                status.classList.add('success');
+            } catch (err) {
+                console.error(err);
+                status.textContent = `Error: ${err.message}`;
+                status.classList.add('error');
+            } finally {
+                btn.disabled = false;
+                btnText.style.display = 'inline';
+                loader.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

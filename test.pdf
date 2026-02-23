@@ -1,0 +1,5 @@
+TimeoutError: Task timed out after 30.00 seconds
+     at new TimeoutError (/home/dev/.local/share/mise/installs/node/22.21.1/lib/node_modules/netlify-cli/node_modules/lambda-local/build/lib/utils.js:119:28)
+    at Context.<anonymous> (/home/dev/.local/share/mise/installs/node/22.21.1/lib/node_modules/netlify-cli/node_modules/lambda-local/build/lib/context.js:113:19)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
